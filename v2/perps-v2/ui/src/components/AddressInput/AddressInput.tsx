@@ -29,7 +29,7 @@ export const AddressInput = () => {
   };
 
   return (
-    <Flex alignSelf="end" width="50%" justifyContent="flex-end" alignItems="center" mb="3px">
+    <Flex alignSelf="end" width="80%" justifyContent="flex-end" alignItems="center" mb="3px">
       <Input
         placeholder="Search by address"
         w="38%"
