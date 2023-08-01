@@ -57,7 +57,7 @@ interface State {
   error: unknown | null;
 }
 
-export function useLargestOpenPosition() {
+export function useLargestOpenPosition(timeFilter: 'day' | 'week' | 'month') {
   const client = useApolloClient();
   const [state, setState] = useState<State>({ loading: true, data: null, error: null });
 
@@ -79,7 +79,7 @@ export function useLargestOpenPosition() {
               const id = `${utils.parseBytes32String(marketKey)}` as FuturesMarketKey;
               const pythInfo = MARKETS[id];
 
-              if (pythInfo.pythIds?.mainnet) {
+              if (pythInfo && pythInfo.pythIds?.mainnet) {
                 return { pythId: pythInfo.pythIds?.mainnet || '', marketKey } || null;
               }
 
@@ -133,7 +133,29 @@ export function useLargestOpenPosition() {
               pythItem,
             };
           })
-          .filter((item) => item !== null)
+          .filter((item) => {
+            if (item && item.pythItem) {
+              const currentTime = Date.now() / 1000; // Current timestamp in seconds
+              const oneDay = 24 * 60 * 60;
+              const oneWeek = 7 * oneDay;
+              const oneMonth = 30 * oneDay;
+
+              // Now using item.pythItem.publishTime instead of item.timestamp
+              switch (timeFilter) {
+                case 'day':
+                  return currentTime - item.pythItem.publishTime < oneDay;
+                case 'week':
+                  return currentTime - item.pythItem.publishTime < oneWeek;
+                case 'month':
+                  return currentTime - item.pythItem.publishTime < oneMonth;
+                default:
+                  return true;
+              }
+            }
+
+            return false;
+          })
+
           .sort((a, b) => {
             return b?.notionalValue?.sub(a?.notionalValue || 0).toNumber();
           })
@@ -145,7 +167,7 @@ export function useLargestOpenPosition() {
         setState({ loading: false, data: null, error });
       }
     })();
-  }, [client]);
+  }, [client, timeFilter]); // timeFilter added as a dependency
 
   return state;
 }

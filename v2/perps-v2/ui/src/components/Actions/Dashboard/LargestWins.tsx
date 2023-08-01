@@ -49,7 +49,7 @@ export const LargestWins = () => {
         }}
         bg="navy.700"
       >
-        <Flex pt={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
+        <Flex py={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
           <Text  fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
             Largest Wins of the day
           </Text>
@@ -60,7 +60,7 @@ export const LargestWins = () => {
           </Box>
         </Flex>
 
-        <Table bg="navy.700" mt={3}>
+        <Table bg="navy.700">
           <Thead>
             <Tr>
               <TableHeaderCell>Market</TableHeaderCell>

@@ -41,7 +41,9 @@ export const ClosestToLiquidation = () => {
           <Thead>
             <Tr>
               <TableHeaderCell>Market</TableHeaderCell>
-              <TableHeaderCell>Size</TableHeaderCell>
+              <TableHeaderCell>
+                <Text>Size</Text>
+              </TableHeaderCell>
               <TableHeaderCell>Realised PnL</TableHeaderCell>
             </Tr>
           </Thead>
