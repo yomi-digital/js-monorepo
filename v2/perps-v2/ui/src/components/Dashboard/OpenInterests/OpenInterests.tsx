@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Flex, Text, FlexProps } from '@chakra-ui/react';
 import { TimeBadge } from '../../TimeBadge';
 import { KeyColour } from '../KeyColour';
+import { OITooltips } from './OITooltips';
 import {
   Bar,
   XAxis,
@@ -155,7 +156,7 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
                 tickLine={{ display: 'none' }}
                 tick={{ fontSize: '12px', fontFamily: 'Inter', fill: '#9999AC' }}
               />
-              <Tooltip />
+              <Tooltip content={OITooltips} cursor={false} wrapperStyle={{ outline: 'none' }} />
               <ReferenceLine y={0} stroke="#000" />
               <Bar dataKey="pv" fill="#F471FF" stackId="stack" />
               <Bar dataKey="uv" fill="#464657" stackId="stack" />

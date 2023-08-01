@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Box, Flex, Text, FlexProps } from '@chakra-ui/react';
 import { TimeBadge } from '../../TimeBadge';
 import { KeyColour } from '../KeyColour';
+import { PnlTooltip } from './PnlTooltip';
+
 import {
   ComposedChart,
   Line,
@@ -158,11 +160,16 @@ export const Pnl = ({ ...props }: FlexProps) => {
                 tickLine={{ display: 'none' }}
                 tick={{ fontSize: '12px', fontFamily: 'Inter', fill: '#9999AC' }}
               />
-              <Tooltip />
+              <Tooltip content={PnlTooltip} cursor={false} wrapperStyle={{ outline: 'none' }} />
               <Area type="monotone" dataKey="amt" fill="#464657" stroke="0" />
               <Bar dataKey="pv" barSize={22} fill="#F471FF" />
               <Line type="monotone" dataKey="cnt" stroke="#4FD1C5" dot={false} />
-              <Line type="monotone" dataKey="uv" stroke="#00D1FF" dot={{ fill: '#00D1FF', r: 2.2 }} />
+              <Line
+                type="monotone"
+                dataKey="uv"
+                stroke="#00D1FF"
+                dot={{ fill: '#00D1FF', r: 2.2 }}
+              />
             </ComposedChart>
           </ResponsiveContainer>
         </>
