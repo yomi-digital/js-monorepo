@@ -79,7 +79,7 @@ export function useLargestOpenPosition() {
               const id = `${utils.parseBytes32String(marketKey)}` as FuturesMarketKey;
               const pythInfo = MARKETS[id];
 
-              if (pythInfo.pythIds?.mainnet) {
+              if (pythInfo && pythInfo.pythIds?.mainnet) {
                 return { pythId: pythInfo.pythIds?.mainnet || '', marketKey } || null;
               }
 
