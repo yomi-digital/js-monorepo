@@ -38,25 +38,25 @@ export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Daily Fee" colour="whiteAlpha.400" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {pnlInfo.daily_fee.toLocaleString('en-US', formatNumberOptions)}
+          ${pnlInfo.daily_fee.toLocaleString('en-US', formatNumberOptions)}
         </Text>
       </Flex>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Pnl (Stakers)" colour="cyan.400" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {pnlInfo.net_to_stakers.toLocaleString('en-US', formatNumberOptions)}
+          ${pnlInfo.net_to_stakers.toLocaleString('en-US', formatNumberOptions)}
         </Text>
       </Flex>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Loss" colour="pink.300" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {pnlInfo.loss.toLocaleString('en-US', formatNumberOptions)}
+          ${pnlInfo.loss.toLocaleString('en-US', formatNumberOptions)}
         </Text>
       </Flex>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Profit" colour="teal.300" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {pnlInfo.profit.toLocaleString('en-US', formatNumberOptions)}
+          ${pnlInfo.profit.toLocaleString('en-US', formatNumberOptions)}
         </Text>
       </Flex>
     </Flex>

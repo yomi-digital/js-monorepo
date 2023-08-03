@@ -100,7 +100,7 @@ export const Pnl = ({ ...props }: FlexProps) => {
                     type="monotone"
                     dataKey="daily_fee"
                     stroke="#00D1FF"
-                    dot={{ fill: '#00D1FF', r: 2.2 }}
+                    dot={false}
                   />
                 </ComposedChart>
               </ResponsiveContainer>

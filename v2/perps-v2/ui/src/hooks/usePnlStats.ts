@@ -57,7 +57,7 @@ const UsePnlStats = (DUNE_API_KEY: string) => {
           };
         });
 
-        const totalDailyFee = transformedRows.reduce((total, row) => total + row.daily_fee, 0);
+        const totalDailyFee = transformedRows.reduce((total, row) => total + row.total_pnl, 0);
 
         setData({
           ...sortedData,
