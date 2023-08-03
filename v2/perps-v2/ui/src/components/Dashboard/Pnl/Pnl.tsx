@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Box, Flex, Text, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, Text, FlexProps, Spinner } from '@chakra-ui/react';
 import { TimeBadge } from '../../TimeBadge';
 import { KeyColour } from '../KeyColour';
 import { PnlTooltip } from './PnlTooltip';
+import UsePnlStats from '../../../hooks/usePnlStats';
+import { DUNE_API_KEY } from '../../../utils/constants';
 
 import {
   ComposedChart,
@@ -13,97 +15,16 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  YAxis,
 } from 'recharts';
 
 export const Pnl = ({ ...props }: FlexProps) => {
-  const data = [
-    {
-      name: 'Jan',
-      uv: 590,
-      pv: -800,
-      amt: 1400,
-      cnt: 490,
-    },
-    {
-      name: 'Feb',
-      uv: 868,
-      pv: -967,
-      amt: 1506,
-      cnt: 590,
-    },
-    {
-      name: 'Mar',
-      uv: 1397,
-      pv: -1098,
-      amt: 989,
-      cnt: 350,
-    },
-    {
-      name: 'Apr',
-      uv: 1480,
-      pv: -1200,
-      amt: 1228,
-      cnt: 480,
-    },
-    {
-      name: 'May',
-      uv: 1520,
-      pv: -1108,
-      amt: 1100,
-      cnt: 460,
-    },
-    {
-      name: 'Jun',
-      uv: 1400,
-      pv: -680,
-      amt: 1700,
-      cnt: 380,
-    },
-    {
-      name: 'Jul',
-      uv: 1400,
-      pv: -680,
-      amt: 1700,
-      cnt: 380,
-    },
-    {
-      name: 'Aug',
-      uv: 400,
-      pv: -680,
-      amt: 1900,
-      cnt: 680,
-    },
-    {
-      name: 'Sep',
-      uv: 1900,
-      pv: -1680,
-      amt: 700,
-      cnt: 180,
-    },
-    {
-      name: 'Oct',
-      uv: 1400,
-      pv: -680,
-      amt: 1700,
-      cnt: 380,
-    },
-    {
-      name: 'Nov',
-      uv: 900,
-      pv: -1280,
-      amt: 800,
-      cnt: 380,
-    },
-    {
-      name: 'Dec',
-      uv: 1000,
-      pv: -680,
-      amt: 1700,
-      cnt: 380,
-    },
-  ];
-
   const [state, setState] = useState<'M' | 'Y'>('M');
+
+  const { data, error, loading, totalDailyFee } = UsePnlStats(DUNE_API_KEY);
+  console.log('data', data);
+  console.log('error', error);
+  console.log('loading', loading);
 
   return (
     <>
@@ -132,47 +53,60 @@ export const Pnl = ({ ...props }: FlexProps) => {
           </Box>
         </Flex>
         <Flex mt={6}>
-          <KeyColour label="DAILY FEE" colour="whiteAlpha.400" />
-          <KeyColour ml={4} label="STAKERS" colour="cyan.500" />
+          <KeyColour label="STAKERS" colour="whiteAlpha.400" />
+          <KeyColour ml={4} label="DAILY FEE" colour="cyan.500" />
           <KeyColour ml={4} label="LOSS" colour="pink.300" />
           <KeyColour ml={4} label="PROFIT" colour="teal.300" />
         </Flex>
+        {loading ? (
+          <Flex justifyContent="center" alignItems="center" height="100%" minHeight={200}>
+            <Spinner size="xl" />
+          </Flex>
+        ) : (
+          <>
+            <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
+              $
+              {totalDailyFee.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Text>
 
-        <>
-          <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
-            $892,188,908
-          </Text>
-          <ResponsiveContainer minWidth="100%" minHeight={200}>
-            <ComposedChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20,
-              }}
-            >
-              <CartesianGrid stroke="0" />
-              <XAxis
-                dataKey="name"
-                tickLine={{ display: 'none' }}
-                tick={{ fontSize: '12px', fontFamily: 'Inter', fill: '#9999AC' }}
-              />
-              <Tooltip content={PnlTooltip} cursor={false} wrapperStyle={{ outline: 'none' }} />
-              <Area type="monotone" dataKey="amt" fill="#464657" stroke="0" />
-              <Bar dataKey="pv" barSize={22} fill="#F471FF" />
-              <Line type="monotone" dataKey="cnt" stroke="#4FD1C5" dot={false} />
-              <Line
-                type="monotone"
-                dataKey="uv"
-                stroke="#00D1FF"
-                dot={{ fill: '#00D1FF', r: 2.2 }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </>
+            {data && (
+              <ResponsiveContainer minWidth="100%" minHeight={200}>
+                <ComposedChart
+                  width={500}
+                  height={400}
+                  data={data.result.rows}
+                  margin={{
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20,
+                  }}
+                >
+                  <CartesianGrid stroke="0" />
+                  <XAxis
+                    dataKey="dayFormatted"
+                    tickLine={{ display: 'none' }}
+                    tick={{ fontSize: '12px', fontFamily: 'Inter', fill: '#9999AC' }}
+                  />
+                  <YAxis hide={true} />
+                  <Tooltip content={PnlTooltip} cursor={false} wrapperStyle={{ outline: 'none' }} />
+                  <Area type="monotone" dataKey="total_pnl" fill="#464657" stroke="0" />
+                  <Bar dataKey="loss" barSize={22} fill="#F471FF" />
+                  <Line type="monotone" dataKey="profit" stroke="#4FD1C5" dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="daily_fee"
+                    stroke="#00D1FF"
+                    dot={{ fill: '#00D1FF', r: 2.2 }}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            )}
+          </>
+        )}
       </Flex>
     </>
   );
