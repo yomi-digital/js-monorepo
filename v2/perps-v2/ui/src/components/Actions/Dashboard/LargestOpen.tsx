@@ -28,7 +28,7 @@ export const LargestOpen = () => {
             <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
               Largest open positions
             </Text>
-            <Box>
+            {/* <Box>
               <TimeBadge
                 title="D"
                 onPress={() => setSelectedFilter('day')}
@@ -44,7 +44,7 @@ export const LargestOpen = () => {
                 onPress={() => setSelectedFilter('month')}
                 isActive={selectedFilter === 'month'}
               />
-            </Box>
+            </Box> */}
           </Flex>
 
           <Table bg="navy.700">
