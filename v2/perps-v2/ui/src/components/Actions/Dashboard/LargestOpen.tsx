@@ -1,12 +1,14 @@
-import { TableContainer, Table, Thead, Tr, Tbody, Flex, Text } from '@chakra-ui/react';
+import { TableContainer, Table, Thead, Tr, Tbody, Flex, Text, Box } from '@chakra-ui/react';
 import { Currency, Market, Size, TableHeaderCell, WalletTooltip } from '../../Shared';
 import { wei } from '@synthetixio/wei';
 import { SmallTableLoading } from './SmallTableLoading';
 import { DataInterface, useLargestOpenPosition } from '../../../hooks';
+import { TimeBadge } from '../../TimeBadge';
+import { useState } from 'react';
 
 export const LargestOpen = () => {
-  const { loading, data, error } = useLargestOpenPosition();
-
+  const [selectedFilter, setSelectedFilter] = useState<'day' | 'week' | 'month'>('day');
+  const { loading, data, error } = useLargestOpenPosition(selectedFilter);
   return (
     <>
       <TableContainer
@@ -22,16 +24,29 @@ export const LargestOpen = () => {
         bg="navy.700"
       >
         <>
-          <Text
-            pt={4}
-            px={6}
-            fontFamily="heading"
-            fontSize="20px"
-            fontWeight={700}
-            lineHeight="28px"
-          >
-            Largest open positions
-          </Text>
+          <Flex py={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
+            <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
+              Largest open positions
+            </Text>
+            {/* <Box>
+              <TimeBadge
+                title="D"
+                onPress={() => setSelectedFilter('day')}
+                isActive={selectedFilter === 'day'}
+              />
+              <TimeBadge
+                title="W"
+                onPress={() => setSelectedFilter('week')}
+                isActive={selectedFilter === 'week'}
+              />
+              <TimeBadge
+                title="M"
+                onPress={() => setSelectedFilter('month')}
+                isActive={selectedFilter === 'month'}
+              />
+            </Box> */}
+          </Flex>
+
           <Table bg="navy.700">
             <Thead>
               <Tr>

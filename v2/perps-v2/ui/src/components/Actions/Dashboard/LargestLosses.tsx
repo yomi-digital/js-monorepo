@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tr, Tbody, Flex, Text } from '@chakra-ui/react';
+import { TableContainer, Table, Thead, Tr, Tbody, Flex, Text, Box } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { getUnixTime, subDays } from 'date-fns';
 import { wei } from '@synthetixio/wei';
@@ -6,12 +6,26 @@ import { POSITIONS_QUERY_MARKET } from '../../../queries/positions';
 import { Market, PnL, TableHeaderCell, WalletTooltip, EntryLiquidated } from '../../Shared';
 import { FuturesPosition_OrderBy, OrderDirection } from '../../../__generated__/graphql';
 import { SmallTableLoading } from './SmallTableLoading';
+import { TimeBadge } from '../../TimeBadge';
+import { useState } from 'react';
+
+type FilterOptions = {
+  [key: string]: number;
+};
+
+const filterOptions: FilterOptions = {
+  day: 1,
+  week: 7,
+  month: 30,
+};
 
 export const LargestLosses = () => {
+  const [selectedFilter, setSelectedFilter] = useState('day');
+
   const { data, loading, error } = useQuery(POSITIONS_QUERY_MARKET, {
     variables: {
       where: {
-        closeTimestamp_gte: `${getUnixTime(subDays(new Date(), 1))}`,
+        closeTimestamp_gte: `${getUnixTime(subDays(new Date(), filterOptions[selectedFilter]))}`,
       },
       orderBy: FuturesPosition_OrderBy.RealizedPnl,
       orderDirection: OrderDirection.Asc,
@@ -34,9 +48,28 @@ export const LargestLosses = () => {
         }}
         bg="navy.700"
       >
-        <Text pt={4} px={6} fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
-          Largest Losses of the day
-        </Text>
+        <Flex py={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
+          <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
+            Largest Losses of the day
+          </Text>
+          <Box>
+            <TimeBadge
+              title="D"
+              onPress={() => setSelectedFilter('day')}
+              isActive={selectedFilter === 'day'}
+            />
+            <TimeBadge
+              title="W"
+              onPress={() => setSelectedFilter('week')}
+              isActive={selectedFilter === 'week'}
+            />
+            <TimeBadge
+              title="M"
+              onPress={() => setSelectedFilter('month')}
+              isActive={selectedFilter === 'month'}
+            />
+          </Box>
+        </Flex>
         <Table bg="navy.700">
           <Thead>
             <Tr>
