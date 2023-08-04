@@ -47,10 +47,10 @@ export const Pnl = ({ ...props }: FlexProps) => {
           <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
             Pnl
           </Text>
-          <Box>
+          {/* <Box>
             <TimeBadge title="1M" onPress={() => setState('M')} isActive={state === 'M'} />
             <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
-          </Box>
+          </Box> */}
         </Flex>
         <Flex mt={6}>
           <KeyColour label="STAKERS" colour="whiteAlpha.400" />
