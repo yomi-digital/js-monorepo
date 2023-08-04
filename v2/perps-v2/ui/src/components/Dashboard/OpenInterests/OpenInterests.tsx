@@ -11,7 +11,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  YAxis,
   ReferenceLine,
   BarChart,
 } from 'recharts';
@@ -19,7 +18,7 @@ import {
 export const OpenInterests = ({ ...props }: FlexProps) => {
   const [state, setState] = useState<'M' | 'Y'>('Y');
 
-  const { data, loading } = UseOiStats(DUNE_API_KEY, state);
+  const { data, loading, totalShortLoss } = UseOiStats(DUNE_API_KEY, state);
 
   return (
     <>
@@ -42,10 +41,11 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
           <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
             Open Interests
           </Text>
-          <Box>
+          {/* FILTERS | de-comment lines for filters */}
+          {/* <Box>
             <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
             <TimeBadge title="1M" onPress={() => setState('M')} isActive={state === 'M'} />
-          </Box>
+          </Box> */}
         </Flex>
         <Flex mt={6}>
           <KeyColour label="LONG" colour="whiteAlpha.400" />
@@ -58,7 +58,10 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
         ) : (
           <>
             <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
-              27814.665675859185
+              ${totalShortLoss?.difference.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </Text>
             {data && (
               <ResponsiveContainer minWidth="100%" minHeight={200}>

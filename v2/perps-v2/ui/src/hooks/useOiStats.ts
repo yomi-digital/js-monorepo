@@ -13,11 +13,17 @@ interface Row {
   day: string;
 }
 
+interface ShortLoss {
+  shortTotal: number;
+  longTotal: number;
+  difference: number;
+}
+
 const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  // const [totalDailyFee, setTotalDailyFee] = useState<number>(0);
+  const [totalShortLoss, setTotalShortLoss] = useState<ShortLoss | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,6 +75,20 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
           };
         });
 
+        const totalLongShortDifference = transformedRowsFormatted.reduce(
+          (acc, row) => {
+            acc.longTotal += row.long;
+            acc.shortTotal += row.short;
+            acc.difference = acc.longTotal - acc.shortTotal;
+            return acc;
+          },
+          { longTotal: 0, shortTotal: 0, difference: 0 }
+        );
+
+        console.log(totalLongShortDifference);
+
+        setTotalShortLoss(totalLongShortDifference);
+
         setData({
           ...sortedData,
           result: {
@@ -77,7 +97,6 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
           },
         });
 
-        // setTotalDailyFee(totalDailyFee);
         setError(null);
       } catch (error) {
         setError(error as AxiosError);
@@ -88,8 +107,7 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
     fetchData();
   }, [DUNE_API_KEY, period]);
 
-  // totalDailyFee
-  return { data, error, loading };
+  return { data, error, loading, totalShortLoss };
 };
 
 export default UseOiStats;
