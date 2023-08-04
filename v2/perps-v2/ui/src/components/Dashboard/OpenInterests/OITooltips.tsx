@@ -8,9 +8,9 @@ type OITooltipsProps = {
 };
 
 export const OITooltips = ({ payload }: OITooltipsProps) => {
-  const tradesInfo = payload?.[0]?.payload as any;
+  const openInterestInfo = payload?.[0]?.payload as any;
 
-  if (!tradesInfo) {
+  if (!openInterestInfo) {
     return null;
   }
 
@@ -25,18 +25,32 @@ export const OITooltips = ({ payload }: OITooltipsProps) => {
       borderColor="gray.900"
     >
       <Text mb={2} fontFamily="heading" color="gray.500" fontSize="12px" lineHeight="16px">
-        {tradesInfo.name}
+        {new Date(openInterestInfo.day).toLocaleString('en-EN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC',
+        })}
       </Text>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Long" colour="whiteAlpha.400" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {tradesInfo.uv}
+          ${openInterestInfo.long.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </Text>
       </Flex>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Short" colour="pink.300" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          {tradesInfo.pv}
+          $
+          {openInterestInfo.short.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </Text>
       </Flex>
     </Flex>
