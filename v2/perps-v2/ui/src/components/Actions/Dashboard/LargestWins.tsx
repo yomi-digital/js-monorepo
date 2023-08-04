@@ -50,13 +50,25 @@ export const LargestWins = () => {
         bg="navy.700"
       >
         <Flex py={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
-          <Text  fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
-            Largest Wins of the day
+          <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
+            Largest Wins of the <span>{selectedFilter}</span>
           </Text>
           <Box>
-            <TimeBadge title="D" onPress={() => setSelectedFilter('day')} isActive={selectedFilter === 'day'} />
-            <TimeBadge title="W" onPress={() => setSelectedFilter('week')} isActive={selectedFilter === 'week'} />
-            <TimeBadge title="M" onPress={() => setSelectedFilter('month')} isActive={selectedFilter === 'month'} />
+            <TimeBadge
+              title="D"
+              onPress={() => setSelectedFilter('day')}
+              isActive={selectedFilter === 'day'}
+            />
+            <TimeBadge
+              title="W"
+              onPress={() => setSelectedFilter('week')}
+              isActive={selectedFilter === 'week'}
+            />
+            <TimeBadge
+              title="M"
+              onPress={() => setSelectedFilter('month')}
+              isActive={selectedFilter === 'month'}
+            />
           </Box>
         </Flex>
 
