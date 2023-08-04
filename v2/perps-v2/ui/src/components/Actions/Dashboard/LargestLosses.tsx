@@ -50,7 +50,7 @@ export const LargestLosses = () => {
       >
         <Flex py={4} px={6} justifyContent="space-between" flexDir="row" w="100%">
           <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
-            Largest Losses of the day
+            Largest Losses of the <span>{selectedFilter}</span>
           </Text>
           <Box>
             <TimeBadge
