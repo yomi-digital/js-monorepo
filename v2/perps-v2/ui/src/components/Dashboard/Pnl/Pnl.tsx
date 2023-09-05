@@ -19,12 +19,8 @@ import {
 } from 'recharts';
 
 export const Pnl = ({ ...props }: FlexProps) => {
-  const [state, setState] = useState<'M' | 'Y'>('M');
-
-  const { data, error, loading, totalDailyFee } = UsePnlStats(DUNE_API_KEY);
-  console.log('data', data);
-  console.log('error', error);
-  console.log('loading', loading);
+  const [state, setState] = useState<'W' | 'M' | 'Y'>('Y');
+  const { data, loading, totalDailyFee } = UsePnlStats(DUNE_API_KEY, state);
 
   return (
     <>
@@ -47,10 +43,11 @@ export const Pnl = ({ ...props }: FlexProps) => {
           <Text fontFamily="heading" fontSize="20px" fontWeight={700} lineHeight="28px">
             Pnl
           </Text>
-          {/* <Box>
+          <Box>
+            <TimeBadge title="1W" onPress={() => setState('W')} isActive={state === 'W'} />
             <TimeBadge title="1M" onPress={() => setState('M')} isActive={state === 'M'} />
             <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
-          </Box> */}
+          </Box>
         </Flex>
         <Flex mt={6}>
           <KeyColour label="STAKERS" colour="whiteAlpha.400" />
@@ -95,13 +92,8 @@ export const Pnl = ({ ...props }: FlexProps) => {
                   <Tooltip content={PnlTooltip} cursor={false} wrapperStyle={{ outline: 'none' }} />
                   <Area type="monotone" dataKey="total_pnl" fill="#464657" stroke="0" />
                   <Bar dataKey="loss" barSize={22} fill="#F471FF" />
-                  <Line type="monotone" dataKey="profit" stroke="#4FD1C5" dot={false} />
-                  <Line
-                    type="monotone"
-                    dataKey="daily_fee"
-                    stroke="#00D1FF"
-                    dot={false}
-                  />
+                  <Bar dataKey="profit" barSize={22} fill="#4FD1C5" />
+                  <Line type="monotone" dataKey="daily_fee" stroke="#00D1FF" dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             )}
