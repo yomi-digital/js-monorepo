@@ -54,17 +54,17 @@ export const LargestLosses = () => {
           </Text>
           <Box>
             <TimeBadge
-              title="D"
+              title="1D"
               onPress={() => setSelectedFilter('day')}
               isActive={selectedFilter === 'day'}
             />
             <TimeBadge
-              title="W"
+              title="1W"
               onPress={() => setSelectedFilter('week')}
               isActive={selectedFilter === 'week'}
             />
             <TimeBadge
-              title="M"
+              title="1M"
               onPress={() => setSelectedFilter('month')}
               isActive={selectedFilter === 'month'}
             />
