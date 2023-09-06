@@ -10,14 +10,6 @@ type PnlTooltipProps = {
 export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
   const pnlInfo = payload?.[0]?.payload as any;
   const formatNumberOptions = { maximumFractionDigits: 2, minimumFractionDigits: 2 };
-  const formatDateOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'UTC',
-  };
   if (!pnlInfo) {
     return null;
   }
@@ -33,7 +25,7 @@ export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
       borderColor="gray.900"
     >
       <Text mb={2} fontFamily="heading" color="gray.500" fontSize="12px" lineHeight="16px">
-        {new Date(pnlInfo.day).toLocaleString('en-EN', formatDateOptions)}
+        {new Date(pnlInfo.day).toISOString().slice(0, 10)}
       </Text>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Daily Fee" colour="whiteAlpha.400" />
@@ -44,7 +36,7 @@ export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Pnl (Stakers)" colour="cyan.400" />
         <Text ml={3} fontFamily="heading" fontSize="12px" lineHeight="16px" textAlign="center">
-          ${pnlInfo.net_to_stakers.toLocaleString('en-US', formatNumberOptions)}
+          ${pnlInfo.total_pnl.toLocaleString('en-US', formatNumberOptions)}
         </Text>
       </Flex>
       <Flex mt={2} justifyContent="space-between" w="100%">

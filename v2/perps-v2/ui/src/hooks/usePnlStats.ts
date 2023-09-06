@@ -19,7 +19,7 @@ interface Row {
   total_pnl: number;
 }
 
-const UsePnlStats = (DUNE_API_KEY: string) => {
+const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,13 +43,70 @@ const UsePnlStats = (DUNE_API_KEY: string) => {
           },
         };
 
-        const transformedRows: Row[] = sortedData.result.rows.map((row: Row) => {
+        const currentDate = new Date();
+        const filteredRows = sortedData.result.rows.filter((row: Row) => {
+          const rowDate = new Date(row.day);
+          switch (period) {
+            case 'W':
+              return rowDate.getTime() >= currentDate.getTime() - 7 * 24 * 60 * 60 * 1000; // Last 7 days
+            case 'M':
+              return (
+                rowDate.getTime() >=
+                new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth() - 1,
+                  currentDate.getDate()
+                ).getTime()
+              ); // Last month
+            case 'Y':
+              return (
+                rowDate.getTime() >=
+                new Date(
+                  currentDate.getFullYear() - 1,
+                  currentDate.getMonth(),
+                  currentDate.getDate()
+                ).getTime()
+              ); // Last year
+            default:
+              return true;
+          }
+        });
+
+        const transformedRows: Row[] = filteredRows.map((row: Row) => {
           const date = new Date(row.day);
-          const formattedDate = date.toLocaleString('en-EN', {
-            month: 'short',
-            year: 'numeric',
-            timeZone: 'UTC',
-          });
+          let formattedDate;
+
+          switch (period) {
+            case 'W':
+              formattedDate = date.toLocaleString('en-EN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'UTC',
+              });
+              break;
+            case 'M':
+              formattedDate = date.toLocaleString('en-EN', {
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'UTC',
+              });
+              break;
+            case 'Y':
+              formattedDate = date.toLocaleString('en-EN', {
+                month: 'short',
+                year: '2-digit',
+                timeZone: 'UTC',
+              });
+              break;
+            default:
+              formattedDate = date.toLocaleString('en-EN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                timeZone: 'UTC',
+              });
+          }
 
           return {
             ...row,
@@ -57,7 +114,7 @@ const UsePnlStats = (DUNE_API_KEY: string) => {
           };
         });
 
-        const totalDailyFee = transformedRows.reduce((total, row) => total + row.total_pnl, 0);
+        const totalDailyFeeValue = transformedRows.reduce((total, row) => total + row.total_pnl, 0);
 
         setData({
           ...sortedData,
@@ -66,7 +123,7 @@ const UsePnlStats = (DUNE_API_KEY: string) => {
             rows: transformedRows,
           },
         });
-        setTotalDailyFee(totalDailyFee);
+        setTotalDailyFee(totalDailyFeeValue);
         setError(null);
       } catch (error) {
         setError(error as AxiosError);
@@ -75,7 +132,7 @@ const UsePnlStats = (DUNE_API_KEY: string) => {
       }
     };
     fetchData();
-  }, [DUNE_API_KEY]);
+  }, [DUNE_API_KEY, period]);
 
   return { data, error, loading, totalDailyFee };
 };
