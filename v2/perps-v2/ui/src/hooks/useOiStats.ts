@@ -75,17 +75,13 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
           };
         });
 
-        const totalLongShortDifference = transformedRowsFormatted.reduce(
-          (acc, row) => {
-            acc.longTotal += row.long;
-            acc.shortTotal += row.short;
-            acc.difference = acc.longTotal - acc.shortTotal;
-            return acc;
-          },
-          { longTotal: 0, shortTotal: 0, difference: 0 }
-        );
-
-        console.log(totalLongShortDifference);
+     
+        const lastRow = transformedRowsFormatted[transformedRowsFormatted.length - 1];
+        const totalLongShortDifference = {
+          longTotal: lastRow.long,
+          shortTotal: lastRow.short,
+          difference: lastRow.long + lastRow.short,
+        };
 
         setTotalShortLoss(totalLongShortDifference);
 
@@ -104,6 +100,7 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [DUNE_API_KEY, period]);
 

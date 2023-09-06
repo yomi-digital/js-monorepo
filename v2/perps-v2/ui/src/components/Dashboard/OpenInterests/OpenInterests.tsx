@@ -16,8 +16,7 @@ import {
 } from 'recharts';
 
 export const OpenInterests = ({ ...props }: FlexProps) => {
-  const [state, setState] = useState<'M' | 'Y'>('Y');
-
+  const [state, setState] = useState<'W' | 'M' | 'Y'>('Y');
   const { data, loading, totalShortLoss } = UseOiStats(DUNE_API_KEY, state);
 
   return (
@@ -42,10 +41,10 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
             Open Interests
           </Text>
           {/* FILTERS | de-comment lines for filters */}
-          {/* <Box>
-            <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
+          <Box>
             <TimeBadge title="1M" onPress={() => setState('M')} isActive={state === 'M'} />
-          </Box> */}
+            <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
+          </Box>
         </Flex>
         <Flex mt={6}>
           <KeyColour label="LONG" colour="whiteAlpha.400" />
@@ -58,7 +57,8 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
         ) : (
           <>
             <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
-              ${totalShortLoss?.difference.toLocaleString('en-US', {
+              $
+              {totalShortLoss?.difference.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -70,7 +70,7 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
                   stackOffset="sign"
                   margin={{
                     top: 5,
-                    right: 30,
+                    right: 20,
                     left: 20,
                     bottom: 5,
                   }}
