@@ -103,10 +103,7 @@ export const Header: FC = () => {
         <AddressInput />
       </Flex>
       {['/', '/trades', '/actions', '/markets'].includes(location.pathname) && (
-        <Box
-          px={{ base: '16px', md: '40px' }}
-          display={{ base: 'flex', sm: 'none', md: 'flex', lg: 'flex' }}
-        >
+        <Box px={{ base: '16px', md: '40px' }} display={{ base: 'none', md: 'flex', lg: 'flex' }}>
           <Flex as="nav" mt={16}>
             <Box style={isActive('/') ? activeStyle : inactiveStyle} pr={7} mr={16} width={120}>
               <RouterLink to="/">Dashboard</RouterLink>
@@ -127,10 +124,6 @@ export const Header: FC = () => {
             >
               <RouterLink to="/markets">Markets</RouterLink>
             </Box>
-            {/* TODO: WILL BE ADDED LATER */}
-            {/* <Box style={isActive('/trades') ? activeStyle : inactiveStyle} pr={7} width={120}>
-              <RouterLink to="/trades">Trades</RouterLink>
-            </Box> */}
           </Flex>
         </Box>
       )}
