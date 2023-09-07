@@ -70,11 +70,25 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
 
         const transformedRowsFormatted: Row[] = filteredRows.map((row: Row) => {
           const date = new Date(row.day);
-          const formattedDate = date.toLocaleString('en-EN', {
-            month: 'short',
-            year: 'numeric',
-            timeZone: 'UTC',
-          });
+
+          let formattedDate = '';
+          switch (period) {
+            case 'M':
+            case 'W':
+              formattedDate = date.toLocaleString('en-EN', {
+                month: '2-digit',
+                day: '2-digit',
+                timeZone: 'UTC',
+              });
+              break;
+            case 'Y':
+            default:
+              formattedDate = date.toLocaleString('en-EN', {
+                month: 'short',
+                timeZone: 'UTC',
+              });
+              break;
+          }
 
           return {
             ...row,
