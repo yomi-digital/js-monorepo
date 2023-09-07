@@ -16,8 +16,8 @@ import {
 } from 'recharts';
 
 export const OpenInterests = ({ ...props }: FlexProps) => {
-  const [state, setState] = useState<'M' | 'Y'>('Y');
-  const { data, loading, lastRow } = UseOiStats(DUNE_API_KEY, state);
+  const [state, setState] = useState<'W' | 'M' | 'Y'>('Y');
+  const { data, loading, totalShortLoss } = UseOiStats(DUNE_API_KEY, state);
 
   return (
     <>
@@ -42,11 +42,12 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
           </Text>
           {/* FILTERS | de-comment lines for filters */}
           <Box>
+          <TimeBadge title="1W" onPress={() => setState('W')} isActive={state === 'W'} />
             <TimeBadge title="1M" onPress={() => setState('M')} isActive={state === 'M'} />
             <TimeBadge title="1Y" onPress={() => setState('Y')} isActive={state === 'Y'} />
           </Box>
         </Flex>
-        <Flex mt={6} mb={3}>
+        <Flex mt={6}>
           <KeyColour label="LONG" colour="whiteAlpha.400" />
           <KeyColour ml={4} label="SHORT" colour="pink.300" />
         </Flex>
@@ -56,34 +57,12 @@ export const OpenInterests = ({ ...props }: FlexProps) => {
           </Flex>
         ) : (
           <>
-            <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
-              <Text
-                my={3}
-                color="white"
-                fontSize="24px"
-                fontFamily="heading"
-                fontWeight={800}
-                m={0}
-              >
-                $
-                {lastRow?.long.toLocaleString('en-US', {
-                  maximumFractionDigits: 0,
-                })}
-              </Text>
-              <Text
-                my={3}
-                color="white"
-                fontSize="24px"
-                fontFamily="heading"
-                fontWeight={800}
-                m={0}
-              >
-                $
-                {lastRow?.short.toLocaleString('en-US', {
-                  maximumFractionDigits: 0,
-                })}
-              </Text>
-            </Flex>
+            <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
+              $
+              {totalShortLoss?.absoluteValue.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
+              })}
+            </Text>
 
             {data && (
               <ResponsiveContainer minWidth="100%" minHeight={200}>
