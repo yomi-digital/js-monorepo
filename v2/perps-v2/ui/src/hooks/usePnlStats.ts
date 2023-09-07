@@ -23,7 +23,7 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [totalDailyFee, setTotalDailyFee] = useState<number>(0);
+  const [lastStakers, setLastStakers] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,7 +114,8 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
           };
         });
 
-        const totalDailyFeeValue = transformedRows.reduce((total, row) => total + row.total_pnl, 0);
+        const lastRow = transformedRows[transformedRows.length - 1];
+        const lastStakers = lastRow.total_pnl;
 
         setData({
           ...sortedData,
@@ -123,7 +124,7 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
             rows: transformedRows,
           },
         });
-        setTotalDailyFee(totalDailyFeeValue);
+        setLastStakers(lastStakers);
         setError(null);
       } catch (error) {
         setError(error as AxiosError);
@@ -134,7 +135,7 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
     fetchData();
   }, [DUNE_API_KEY, period]);
 
-  return { data, error, loading, totalDailyFee };
+  return { data, error, loading, lastStakers };
 };
 
 export default UsePnlStats;

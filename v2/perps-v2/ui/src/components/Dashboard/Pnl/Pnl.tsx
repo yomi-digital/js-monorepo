@@ -20,7 +20,7 @@ import {
 
 export const Pnl = ({ ...props }: FlexProps) => {
   const [state, setState] = useState<'W' | 'M' | 'Y'>('Y');
-  const { data, loading, totalDailyFee } = UsePnlStats(DUNE_API_KEY, state);
+  const { data, loading, lastStakers } = UsePnlStats(DUNE_API_KEY, state);
 
   return (
     <>
@@ -63,9 +63,8 @@ export const Pnl = ({ ...props }: FlexProps) => {
           <>
             <Text my={3} color="white" fontSize="24px" fontFamily="heading" fontWeight={800}>
               $
-              {totalDailyFee.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+              {lastStakers.toLocaleString('en-US', {
+                maximumFractionDigits: 0,
               })}
             </Text>
 
