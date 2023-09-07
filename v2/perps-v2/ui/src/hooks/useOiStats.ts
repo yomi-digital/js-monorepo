@@ -16,10 +16,10 @@ interface Row {
 interface ShortLoss {
   shortTotal: number;
   longTotal: number;
-  difference: number;
+  absoluteValue: number;
 }
 
-const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
+const UseOiStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,25 +44,31 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
           },
         };
 
-        const groupByMonth = (rows: Row[]) => {
-          return rows.reduce((acc: any, row) => {
-            const date = new Date(row.day);
-            const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
-            acc[monthKey] = acc[monthKey] || {
-              short: 0,
-              long: 0,
-              day: `${date.getFullYear()}-${date.getMonth() + 1}`,
-            };
-            acc[monthKey].short += row.short;
-            acc[monthKey].long += row.long;
-            return acc;
-          }, {});
-        };
+        const endDate = new Date();
+        let startDate: Date;
 
-        const monthlyData: Row[] = Object.values(groupByMonth(sortedData.result.rows)) as Row[];
+        switch (period) {
+          case 'M':
+            startDate = new Date(endDate);
+            startDate.setDate(endDate.getDate() - 31);
+            break;
+          case 'W':
+            startDate = new Date(endDate);
+            startDate.setDate(endDate.getDate() - 7);
+            break;
+          case 'Y':
+          default:
+            startDate = new Date(endDate);
+            startDate.setDate(endDate.getDate() - 365);
+            break;
+        }
 
-        const transformedRows = period === 'Y' ? sortedData.result.rows : monthlyData;
-        const transformedRowsFormatted: Row[] = transformedRows.map((row: Row) => {
+        const filteredRows: Row[] = sortedData.result.rows.filter(
+          (row) =>
+            Date.parse(row.day) >= startDate.getTime() && Date.parse(row.day) <= endDate.getTime()
+        );
+
+        const transformedRowsFormatted: Row[] = filteredRows.map((row: Row) => {
           const date = new Date(row.day);
           const formattedDate = date.toLocaleString('en-EN', {
             month: 'short',
@@ -77,13 +83,13 @@ const UseOiStats = (DUNE_API_KEY: string, period: 'M' | 'Y') => {
         });
 
         const lastRow = transformedRowsFormatted[transformedRowsFormatted.length - 1];
-        const totalLongShortDifference = {
+        const totalLongShortAbsoluteValue = {
           longTotal: lastRow.long,
           shortTotal: lastRow.short,
-          difference: lastRow.long + lastRow.short,
+          absoluteValue: lastRow.long - lastRow.short,
         };
 
-        setTotalShortLoss(totalLongShortDifference);
+        setTotalShortLoss(totalLongShortAbsoluteValue);
         setLastRow(lastRow);
         setData({
           ...sortedData,
