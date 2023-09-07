@@ -19,12 +19,12 @@ export const Dashboard: FC = () => {
   return (
     <Box px={{ base: '16px', md: '40px' }}>
       <Flex
-        mt={16}
+        mt={[8, 16]}
         pb={2}
         justifyContent="space-between"
         flexDirection={{ base: 'column-reverse', lg: 'column' }}
       >
-        <Flex flexDir="column" width={{ base: '100%', lg: '100%' }}>
+        <Flex flexDir="column" width={{ base: '100%', lg: '100%' }} mt={[8, 0]}>
           <Heading color="#00D1FF" fontSize="24px">
             Stats
           </Heading>
@@ -89,16 +89,17 @@ export const Dashboard: FC = () => {
             </Flex>
           </Flex>
         </Flex>
-
-        <Flex mt={8} justifyContent="space-between">
-          <Heading color="#00D1FF" fontSize="24px">
-            Latest Actions
-          </Heading>
-          <Button onClick={() => navigate('/actions')} variant="outline">
-            See all actions <ArrowUpIcon ml={2} transform="rotate(45deg)" />
-          </Button>
-        </Flex>
-        <DashboardActions />
+        <Box >
+          <Flex mt={[0, 8]} justifyContent="space-between">
+            <Heading color="#00D1FF" fontSize="24px">
+              Latest Actions
+            </Heading>
+            <Button onClick={() => navigate('/actions')} variant="outline">
+              See all actions <ArrowUpIcon ml={2} transform="rotate(45deg)" />
+            </Button>
+          </Flex>
+          <DashboardActions />
+        </Box>
       </Flex>
     </Box>
   );
