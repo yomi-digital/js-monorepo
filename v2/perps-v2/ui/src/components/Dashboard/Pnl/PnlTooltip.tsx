@@ -14,6 +14,10 @@ export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
     return null;
   }
 
+  const formatDate = new Date(pnlInfo.day.replace(' ', 'T').replace(' UTC', 'Z'))
+    .toISOString()
+    .slice(0, 10);
+
   return (
     <Flex
       flexDirection="column"
@@ -25,7 +29,7 @@ export const PnlTooltip = ({ payload }: PnlTooltipProps) => {
       borderColor="gray.900"
     >
       <Text mb={2} fontFamily="heading" color="gray.500" fontSize="12px" lineHeight="16px">
-        {new Date(pnlInfo.day).toISOString().slice(0, 10)}
+        {formatDate}
       </Text>
       <Flex mt={2} justifyContent="space-between" w="100%">
         <KeyColour label="Daily Fee" colour="whiteAlpha.400" />
