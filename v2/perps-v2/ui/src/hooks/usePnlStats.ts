@@ -42,13 +42,16 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
             ),
           },
         };
-
         const currentDate = new Date();
-        const filteredRows = sortedData.result.rows.filter((row: Row) => {
-          const rowDate = new Date(row.day);
+        const filteredRows = sortedData.result.rows.sort((a, b) => {
+          const aDate = new Date(a.day.replace(' ', 'T').replace(' UTC', 'Z'));
+          const bDate = new Date(b.day.replace(' ', 'T').replace(' UTC', 'Z'));
+          return aDate.getTime() - bDate.getTime();
+        }).filter((row: Row) => {
+          const rowDate = new Date(row.day.replace(' ', 'T').replace(' UTC', 'Z'));
           switch (period) {
             case 'W':
-              return rowDate.getTime() >= currentDate.getTime() - 7 * 24 * 60 * 60 * 1000; // Last 7 days
+              return rowDate.getTime() >= currentDate.getTime() - 7 * 24 * 60 * 60 * 1000;
             case 'M':
               return (
                 rowDate.getTime() >=
@@ -57,7 +60,7 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
                   currentDate.getMonth() - 1,
                   currentDate.getDate()
                 ).getTime()
-              ); // Last month
+              );
             case 'Y':
               return (
                 rowDate.getTime() >=
@@ -66,12 +69,11 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
                   currentDate.getMonth(),
                   currentDate.getDate()
                 ).getTime()
-              ); // Last year
+              );
             default:
               return true;
           }
         });
-
         const transformedRows: Row[] = filteredRows.map((row: Row) => {
           const date = new Date(row.day);
           let formattedDate;
@@ -113,9 +115,11 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
             dayFormatted: formattedDate,
           };
         });
-
         const lastRow = transformedRows[transformedRows.length - 1];
-        const lastStakers = lastRow.total_pnl;
+        if (lastRow) {
+          const lastStakers = lastRow.total_pnl;
+          setLastStakers(lastStakers);
+        }
 
         setData({
           ...sortedData,
@@ -124,7 +128,7 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
             rows: transformedRows,
           },
         });
-        setLastStakers(lastStakers);
+
         setError(null);
       } catch (error) {
         setError(error as AxiosError);
@@ -134,7 +138,6 @@ const UsePnlStats = (DUNE_API_KEY: string, period: 'W' | 'M' | 'Y') => {
     };
     fetchData();
   }, [DUNE_API_KEY, period]);
-
   return { data, error, loading, lastStakers };
 };
 
