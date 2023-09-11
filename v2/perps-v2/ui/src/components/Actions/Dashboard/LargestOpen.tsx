@@ -36,10 +36,7 @@ export const LargestOpen = () => {
             <Thead>
               <Tr>
                 <TableHeaderCell>Market</TableHeaderCell>
-                <TableHeaderCell>
-                  <Text>Size</Text>
-                  <Text>&nbsp;</Text>
-                </TableHeaderCell>
+                <TableHeaderCell>Size</TableHeaderCell>
                 <TableHeaderCell>Entry Price</TableHeaderCell>
               </Tr>
             </Thead>

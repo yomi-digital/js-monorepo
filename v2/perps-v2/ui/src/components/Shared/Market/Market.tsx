@@ -20,7 +20,7 @@ export const Market = ({ asset, leverage, direction, isPosition = true }: Market
   const isLong = direction === 'LONG';
 
   return (
-    <Td border="none" py={6}>
+    <Td border="none">
       <Fade in>
         <Flex alignItems="center">
           <Flex alignItems="center">
