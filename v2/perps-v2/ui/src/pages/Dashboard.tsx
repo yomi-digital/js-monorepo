@@ -42,8 +42,13 @@ export const Dashboard: FC = () => {
           >
             <Trades width={{ base: '100%', md: '49%' }} />
             <Traders width={{ base: '100%', md: '49%' }} />
-            <Pnl width={{ base: '100%', md: '32%' }} />
-            <OpenInterests width={{ base: '100%', md: '32%' }} />
+          </Flex>
+          <Flex
+            justifyContent="space-between"
+            width="100%"
+            flexDirection={{ base: 'column', md: 'row' }}
+          >
+            <Pnl width={{ base: '100%', md: '49%' }} />
           </Flex>
           <Flex mt={2} justifyContent="space-between">
             <Heading fontSize="30px">Markets</Heading>
