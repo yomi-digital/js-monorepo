@@ -8,7 +8,7 @@ import {
   ClosestToLiquidation,
   DashboardActions,
 } from '../components';
-import { Fees, Traders, Trades, Volume, Pnl, OpenInterests } from '../components/Dashboard';
+import { Fees, Traders, Trades, Volume, Pnl } from '../components/Dashboard';
 import { Markets } from '../components/Dashboard/Markets';
 
 export const Dashboard: FC = () => {
