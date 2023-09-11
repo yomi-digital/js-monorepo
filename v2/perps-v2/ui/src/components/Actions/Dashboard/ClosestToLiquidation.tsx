@@ -23,7 +23,7 @@ export const ClosestToLiquidation = () => {
   return (
     <>
       <TableContainer
-        width="100%"
+        maxW="100%"
         my={5}
         borderColor="gray.900"
         borderWidth="1px"
