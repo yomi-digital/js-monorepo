@@ -1,6 +1,4 @@
-import React from 'react';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
-import { ArrowUpIcon } from '@chakra-ui/icons';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -18,87 +16,67 @@ export const Dashboard: FC = () => {
 
   return (
     <Box px={{ base: '16px', md: '40px' }}>
+      <Heading mt={16} fontSize="36px">
+        Dashboard
+      </Heading>
       <Flex
-        mt={16}
+        pt={8}
         pb={2}
         justifyContent="space-between"
-        flexDirection={{ base: 'column-reverse', lg: 'column' }}
+        flexDirection={{ base: 'column-reverse', lg: 'row' }}
       >
-        <Flex flexDir="column" width={{ base: '100%', lg: '100%' }}>
-          <Heading color="#00D1FF" fontSize="24px">
-            Stats
-          </Heading>
+        <Flex flexDir="column" width={{ base: '100%', lg: '60%' }}>
+          <Heading fontSize="30px">Stats</Heading>
           <Flex
             justifyContent="space-between"
             width="100%"
             flexDirection={{ base: 'column', md: 'row' }}
           >
-            <Volume width={{ base: '100%', md: '32%' }} />
-            <Fees width={{ base: '100%', md: '32%' }} />
-            <Trades width={{ base: '100%', md: '32%' }} />
+            <Volume width={{ base: '100%', md: '49%' }} />
+            <Fees width={{ base: '100%', md: '49%' }} />
           </Flex>
           <Flex
             justifyContent="space-between"
             width="100%"
             flexDirection={{ base: 'column', md: 'row' }}
           >
-            <Traders width={{ base: '100%', md: '32%' }} />
-            <Pnl width={{ base: '100%', md: '32%' }} />
-            <OpenInterests width={{ base: '100%', md: '32%' }} />
+            <Trades width={{ base: '100%', md: '49%' }} />
+            <Traders width={{ base: '100%', md: '49%' }} />
           </Flex>
-          <Flex mt={8} flexDir="column" width={{ base: '100%', lg: '100%' }}>
-            <Flex mt={2} justifyContent="space-between">
-              <Heading color="#00D1FF" fontSize="24px">
-                Markets
-              </Heading>
-              <Button onClick={() => navigate('/markets')} variant="outline">
-                See all markets <ArrowUpIcon ml={2} transform="rotate(45deg)" />
-              </Button>
-            </Flex>
-            <Markets />
+          <Flex
+            justifyContent="space-between"
+            width="100%"
+            flexDirection={{ base: 'column', md: 'row' }}
+          >
+            <OpenInterests width={{ base: '100%', md: '49%' }} />
           </Flex>
+          <Flex mt={2} justifyContent="space-between">
+            <Heading fontSize="30px">Markets</Heading>
+            <Button onClick={() => navigate('/markets')} variant="outline">
+              See all markets
+            </Button>
+          </Flex>
+          <Markets />
+          <Flex mt={8} justifyContent="space-between">
+            <Heading fontSize="30px">Latest Actions</Heading>
+            <Button onClick={() => navigate('/actions')} variant="outline">
+              See all actions
+            </Button>
+          </Flex>
+          <DashboardActions />
         </Flex>
-
-        <Flex mt={8} flexDir="column" width={{ base: '100%', lg: '100%' }}>
-          <Heading color="#00D1FF" fontSize="24px">
-            Leaderboard
-          </Heading>
-          <Flex
-            justifyContent="space-between"
-            width="100%"
-            flexDirection={{ base: 'column', md: 'row' }}
-          >
-            <Flex width={{ base: '100%', md: '49%' }}>
-              <LargestOpen />
-            </Flex>
-            <Flex width={{ base: '100%', md: '49%' }}>
-              <LargestWins />
-            </Flex>
-          </Flex>
-          <Flex
-            justifyContent="space-between"
-            width="100%"
-            flexDirection={{ base: 'column', md: 'row' }}
-          >
-            <Flex width={{ base: '100%', md: '49%' }}>
-              <LargestLosses />
-            </Flex>
-
-            <Flex width={{ base: '100%', md: '49%' }}>
-              <ClosestToLiquidation />
-            </Flex>
-          </Flex>
+        <Flex
+          flexDir="column"
+          mr={{ base: 0, lg: 4 }}
+          ml={{ base: 0, lg: 8 }}
+          width={{ base: '100%', lg: '40%' }}
+        >
+          <Heading fontSize="30px">Leaderboard</Heading>
+          <LargestOpen />
+          <LargestWins />
+          <LargestLosses />
+          <ClosestToLiquidation />
         </Flex>
-
-        <Flex mt={8} justifyContent="space-between">
-          <Heading color="#00D1FF" fontSize="24px">
-            Latest Actions
-          </Heading>
-          <Button onClick={() => navigate('/actions')} variant="outline">
-            See all actions <ArrowUpIcon ml={2} transform="rotate(45deg)" />
-          </Button>
-        </Flex>
-        <DashboardActions />
       </Flex>
     </Box>
   );
