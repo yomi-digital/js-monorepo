@@ -28,7 +28,7 @@ export const Market = ({
   const isLong = direction === 'LONG';
 
   return (
-    <Td border="none">
+    <Td border="none" py={6}>
       <Fade in>
         <Flex alignItems="center">
           <Flex alignItems="center">
